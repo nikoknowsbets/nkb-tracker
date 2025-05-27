@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
+import "./App.css";
 
 export default function NKBTracker() {
-  const [view, setView] = useState(""); // no tab selected initially
+  const [view, setView] = useState("");
   const [wins, setWins] = useState([]);
   const [losses, setLosses] = useState([]);
   const [error, setError] = useState("");
@@ -29,11 +30,8 @@ export default function NKBTracker() {
           };
         });
 
-        const winList = parsed.filter((r) => r.outcome === "win");
-        const lossList = parsed.filter((r) => r.outcome === "loss");
-
-        setWins(winList);
-        setLosses(lossList);
+        setWins(parsed.filter((r) => r.outcome === "win"));
+        setLosses(parsed.filter((r) => r.outcome === "loss"));
       } catch (err) {
         console.error("Fetch error:", err);
         setError("Failed to load data.");
@@ -49,118 +47,49 @@ export default function NKBTracker() {
 
   const renderRows = (records) => {
     const sorted = [...records].sort((a, b) => new Date(b.date) - new Date(a.date));
-    return (
-      <div style={{ width: "100%" }}>
-        {sorted.map((r, i) => (
-          <div
-            key={i}
-            style={{
-              padding: "12px",
-              borderBottom: "1px solid #ccc",
-              color: view === "wins" ? "green" : "red",
-              fontSize: "1rem",
-            }}
-          >
-            <div>{r.date}</div>
-            <div>
-              <strong>{r.bet}</strong> — {r.type}
-            </div>
-          </div>
-        ))}
+    return sorted.map((r, i) => (
+      <div key={i} className={`row ${r.outcome}`}>
+        <div>{r.date}</div>
+        <div>
+          <strong>{r.bet}</strong> — {r.type}
+        </div>
       </div>
-    );
+    ));
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        fontFamily: "Arial, sans-serif",
-        padding: "1.5rem",
-        backgroundColor: "#ffffff",
-      }}
-    >
-      <div
-        style={{
-          width: "100%",
-          maxWidth: "700px",
-          textAlign: "center",
-        }}
-      >
-        <img
-          src="/logo.png"
-          alt="NKB logo"
-          style={{
-            width: "120px",
-            height: "120px",
-            marginBottom: "1rem",
-          }}
-        />
-
-        <h1 style={{ fontSize: "2.4rem", marginBottom: "1rem" }}>NKB Tracker</h1>
+    <div className="container">
+      <div className="inner">
+        <img src="/logo.png" alt="NKB logo" className="logo" />
+        <h1>NKB Tracker</h1>
 
         {error && <p style={{ color: "red" }}>{error}</p>}
 
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            justifyContent: "space-between",
-            marginBottom: "1rem",
-            fontSize: "1rem",
-          }}
-        >
+        <div className="summary">
           <div>Wins: {totalWins}</div>
           <div>Win Rate: {isNaN(winRate) ? "-" : `${winRate}%`}</div>
           <div>Losses: {totalLosses}</div>
         </div>
 
-        <div style={{ marginBottom: "1rem" }}>
+        <div>
           <button
             onClick={() => setView("wins")}
-            style={{
-              marginRight: "1rem",
-              padding: "0.5rem 1rem",
-              borderRadius: "6px",
-              border: "1px solid #ccc",
-              backgroundColor: view === "wins" ? "#e6ffe6" : "#f9f9f9",
-              cursor: "pointer",
-            }}
+            className={view === "wins" ? "active" : ""}
           >
             Show Wins
           </button>
           <button
             onClick={() => setView("losses")}
-            style={{
-              padding: "0.5rem 1rem",
-              borderRadius: "6px",
-              border: "1px solid #ccc",
-              backgroundColor: view === "losses" ? "#ffe6e6" : "#f9f9f9",
-              cursor: "pointer",
-            }}
+            className={view === "losses" ? "loss" : ""}
           >
             Show Losses
           </button>
         </div>
 
         {view === "" ? (
-          <div
-            style={{
-              marginTop: "3rem",
-              fontSize: "1.6rem",
-              fontWeight: "bold",
-              color: "#444",
-            }}
-          >
-            NKB, where smart bettors start.
-          </div>
+          <div className="welcome">NKB, where smart bettors start.</div>
         ) : (
-          <div style={{ textAlign: "left" }}>
-            {renderRows(view === "wins" ? wins : losses)}
-          </div>
+          renderRows(view === "wins" ? wins : losses)
         )}
       </div>
     </div>
