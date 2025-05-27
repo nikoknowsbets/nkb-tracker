@@ -1,42 +1,100 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
+/* Base layout */
+.container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  background-color: #fff;
   padding: 2rem;
+}
+
+.inner {
+  width: 100%;
+  max-width: 700px;
   text-align: center;
 }
 
 .logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+  width: 120px;
+  height: 120px;
+  margin-bottom: 1rem;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+h1 {
+  font-size: 2.4rem;
+  margin-bottom: 1rem;
+}
+
+.summary {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  margin: 0 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  cursor: pointer;
+}
+
+button.active {
+  background-color: #e6ffe6;
+}
+
+button.loss {
+  background-color: #ffe6e6;
+}
+
+.row {
+  padding: 12px;
+  border-bottom: 1px solid #ccc;
+  font-size: 1rem;
+  text-align: left;
+}
+
+.row.win {
+  color: green;
+}
+
+.row.loss {
+  color: red;
+}
+
+.welcome {
+  margin-top: 3rem;
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #444;
+}
+
+/* Mobile tweaks */
+@media (max-width: 600px) {
+  .summary {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
   }
-  to {
-    transform: rotate(360deg);
+
+  button {
+    margin-bottom: 0.5rem;
   }
-}
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+  .inner {
+    padding: 0 1rem;
   }
-}
 
-.card {
-  padding: 2em;
-}
+  h1 {
+    font-size: 2rem;
+  }
 
-.read-the-docs {
-  color: #888;
+  .logo {
+    width: 100px;
+    height: 100px;
+  }
 }
