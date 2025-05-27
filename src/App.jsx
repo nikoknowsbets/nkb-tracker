@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 export default function NKBTracker() {
-  const [view, setView] = useState(""); // empty = no tab clicked
+  const [view, setView] = useState(""); // no tab selected initially
   const [wins, setWins] = useState([]);
   const [losses, setLosses] = useState([]);
   const [error, setError] = useState("");
@@ -47,25 +47,29 @@ export default function NKBTracker() {
   const totalLosses = losses.length;
   const winRate = ((totalWins / (totalWins + totalLosses)) * 100).toFixed(1);
 
-  const renderRows = (records) => (
-    <div style={{ width: "100%" }}>
-      {records.map((r, i) => (
-        <div
-          key={i}
-          style={{
-            padding: "8px",
-            borderBottom: "1px solid #ccc",
-            color: view === "wins" ? "green" : "red",
-          }}
-        >
-          <div>{r.date}</div>
-          <div>
-            <strong>{r.bet}</strong> — {r.type}
+  const renderRows = (records) => {
+    const sorted = [...records].sort((a, b) => new Date(b.date) - new Date(a.date));
+    return (
+      <div style={{ width: "100%" }}>
+        {sorted.map((r, i) => (
+          <div
+            key={i}
+            style={{
+              padding: "12px",
+              borderBottom: "1px solid #ccc",
+              color: view === "wins" ? "green" : "red",
+              fontSize: "1rem",
+            }}
+          >
+            <div>{r.date}</div>
+            <div>
+              <strong>{r.bet}</strong> — {r.type}
+            </div>
           </div>
-        </div>
-      ))}
-    </div>
-  );
+        ))}
+      </div>
+    );
+  };
 
   return (
     <div
@@ -75,25 +79,38 @@ export default function NKBTracker() {
         justifyContent: "center",
         alignItems: "center",
         fontFamily: "Arial, sans-serif",
-        padding: "2rem",
+        padding: "1.5rem",
         backgroundColor: "#ffffff",
       }}
     >
-      <div style={{ width: "100%", maxWidth: "600px", textAlign: "center" }}>
+      <div
+        style={{
+          width: "100%",
+          maxWidth: "700px",
+          textAlign: "center",
+        }}
+      >
         <img
           src="/logo.png"
           alt="NKB logo"
-          style={{ width: "80px", height: "80px", marginBottom: "1rem" }}
+          style={{
+            width: "120px",
+            height: "120px",
+            marginBottom: "1rem",
+          }}
         />
 
-        <h1>NKB Tracker</h1>
+        <h1 style={{ fontSize: "2.4rem", marginBottom: "1rem" }}>NKB Tracker</h1>
+
         {error && <p style={{ color: "red" }}>{error}</p>}
 
         <div
           style={{
             display: "flex",
+            flexWrap: "wrap",
             justifyContent: "space-between",
             marginBottom: "1rem",
+            fontSize: "1rem",
           }}
         >
           <div>Wins: {totalWins}</div>
@@ -106,7 +123,11 @@ export default function NKBTracker() {
             onClick={() => setView("wins")}
             style={{
               marginRight: "1rem",
+              padding: "0.5rem 1rem",
+              borderRadius: "6px",
+              border: "1px solid #ccc",
               backgroundColor: view === "wins" ? "#e6ffe6" : "#f9f9f9",
+              cursor: "pointer",
             }}
           >
             Show Wins
@@ -114,16 +135,26 @@ export default function NKBTracker() {
           <button
             onClick={() => setView("losses")}
             style={{
+              padding: "0.5rem 1rem",
+              borderRadius: "6px",
+              border: "1px solid #ccc",
               backgroundColor: view === "losses" ? "#ffe6e6" : "#f9f9f9",
+              cursor: "pointer",
             }}
           >
             Show Losses
           </button>
         </div>
 
-        {/* Show welcome message before any tab is clicked */}
         {view === "" ? (
-          <div style={{ marginTop: "3rem", fontSize: "1.5rem", fontWeight: "bold" }}>
+          <div
+            style={{
+              marginTop: "3rem",
+              fontSize: "1.6rem",
+              fontWeight: "bold",
+              color: "#444",
+            }}
+          >
             NKB, where smart bettors start.
           </div>
         ) : (
